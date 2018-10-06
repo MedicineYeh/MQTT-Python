@@ -68,7 +68,7 @@ def foo2():
 # The callback for when the client receives a CONNACK response from the server.
 @app.on_message()
 def handle_message(client, userdata, msg):
-    print(msg.topic+" "+str(msg.payload))
+    print('{} {}'.format(msg.topic, str(msg.payload)))
 
 # The callback for when a PUBLISH message is received from the server.
 @app.on_connect()
