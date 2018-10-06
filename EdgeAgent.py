@@ -24,6 +24,7 @@ class EdgeAgent(MqttDecorator):
         self.client_id = self.config.get("MQTT_CLIENT_ID", "")
         self.client = mqtt.Client(
             client_id = self.client_id,
+            clean_session = True,
             transport = self.config.get("MQTT_TRANSPORT", "tcp"),
         )
 
@@ -84,9 +85,6 @@ class EdgeAgent(MqttDecorator):
 
         self.client.reconnect_delay_set(self.reconnect_delay, self.reconnect_delay_max)
 
-        # Call mqtt client with another thread
-        self.client.loop_start()
-
         res = self.client.connect(
             self.broker_url, self.broker_port, keepalive=self.keepalive
         )
@@ -99,6 +97,9 @@ class EdgeAgent(MqttDecorator):
             logger.error(
                 "Could not connect to MQTT Broker, Error Code: {0}".format(res)
             )
+
+        # Call mqtt client with another thread
+        self.client.loop_start()
 
         if self.gui is not None:
             self.gui.init()
