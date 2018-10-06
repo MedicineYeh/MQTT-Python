@@ -4,13 +4,19 @@ from circuits.tools import graph
 
 from Common.Events import PeriodicEvents
 
+class stop_timers(Event):
+    """ Timer stop event"""
+
+class start_timers(Event):
+    """ Timer start event"""
+
 class Scheduler(Component):
-    def stopTimers(self):
+    def stop_timers(self):
         logger.info("Stop timers")
         for t in self.timers:
             t.unregister()
 
-    def startTimers(self):
+    def start_timers(self):
         logger.info("Start timers")
         for t in self.timers:
             t.register(self)
@@ -40,6 +46,6 @@ class Scheduler(Component):
         logger.debug(graph(self.root))
 
         # The following codes are just a demo on how to stop/start timers with timmer
-        # Timer(1, Event.create("stopTimers")).register(self)
-        # Timer(2, Event.create("startTimers")).register(self)
+        # Timer(1, Event.create("stop_timers")).register(self)
+        # Timer(2, Event.create("start_timers")).register(self)
 

@@ -7,18 +7,26 @@ from MqttDecorator import MqttDecorator
 from Common.EventEngine import Scheduler
 
 class EdgeAgent(MqttDecorator):
-    def __init__(self, name = 'MQTT'):
-        self.name = name
+    def __init__(self, config, events, gui = None):
+        super().__init__() # base class doesn't get a factory
         self._connect_handler = None  # type: Optional[Callable]
         self._disconnect_handler = None  # type: Optional[Callable]
         self.topics = {}  # type: Dict[str, TopicQos]
-        self.connected = False
-        self.client = mqtt.Client()
-        self.config = {}
+        self.config = config
+        self.connected = False # This variable is set/unset in MqttDecorator
 
-        self.gui = None
+        # These are public member variables needs to be set from caller
+        self.events = events
+        self.gui = gui
+        self._init_app()
 
     def _init_app(self):
+        self.client_id = self.config.get("MQTT_CLIENT_ID", "")
+        self.client = mqtt.Client(
+            client_id = self.client_id,
+            transport = self.config.get("MQTT_TRANSPORT", "tcp"),
+        )
+
         self.client.on_connect = self._handle_connect
         self.client.on_disconnect = self._handle_disconnect
         self.username = self.config.get("MQTT_USERNAME")
@@ -52,8 +60,9 @@ class EdgeAgent(MqttDecorator):
                 self.last_will_retain,
             )
 
+        logger.info('Agent ID: {}'.format(self.client_id))
+
     def run(self):
-        self._init_app()
         if self.username is not None:
             self.client.username_pw_set(self.username, self.password)
 

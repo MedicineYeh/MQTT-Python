@@ -3,6 +3,7 @@
 
 from logzero import logger
 
+import paho.mqtt.client as mqtt
 from paho.mqtt.client import (  # noqa: F401
     Client,
     MQTT_ERR_SUCCESS,

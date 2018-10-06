@@ -16,26 +16,15 @@ class key_dependent_dict(defaultdict):
         return ret
 
 class TkinterGUI():
-    def __init__(self, name = 'GUI'):
-        self.name = name
+    def __init__(self, config = {}):
         # Config default values
         self.config = {
                     'TITLE': 'MQTT',
                     'GEOMETRY': '580x240',
                 }
+        # Merge two dicts
+        self.config = {**self.config, **config}
         self.callback = key_dependent_dict(lambda key: self._dummy_event_handler(key))
-
-    def on_event(self, event_name):
-        """ A decorator function to register the event with one argument to specify interval """
-        def _f(func, event_name):
-            self.callback[event_name] = func
-        return partial(_f, event_name = event_name)
-
-    def on_exit(self):
-        """ A decorator function to register the event with one argument to specify interval """
-        def wrap_exit(func):
-            self._exit_callback = func
-        return wrap_exit
 
     def _exit_handler(self):
         self.root.quit()
@@ -46,6 +35,22 @@ class TkinterGUI():
         def _f(name):
             logger.error('Event "{}" is not implemented yet!'.format(name))
         return partial(_f, name)
+
+    def on_event(self, event_name):
+        # type: (string) -> Callable
+        """ A decorator function to register the event with one argument to specify interval """
+        def _f(func, event_name):
+            # type: (Callable) -> Callable
+            self.callback[event_name] = func
+        return partial(_f, event_name = event_name)
+
+    def on_exit(self):
+        # type: () -> Callable
+        """ A decorator function to register the event with one argument to specify interval """
+        def wrap_exit(func):
+            # type: (Callable) -> Callable
+            self._exit_callback = func
+        return wrap_exit
 
     def init(self):
         self.root = tk.Tk()
