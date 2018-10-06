@@ -42,6 +42,7 @@ app.gui.config['TITLE'] = 'MQTT Controler'
 # Only critical GUI events manages here to call other functions and gracefully shutdown
 @app.gui.on_exit()
 def exit_button():
+    app.stop()
     logger.info('Good Bye')
     os._exit(0)
 
