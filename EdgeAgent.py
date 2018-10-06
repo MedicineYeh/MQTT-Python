@@ -98,6 +98,8 @@ class EdgeAgent(MqttDecorator):
                 "Could not connect to MQTT Broker, Error Code: {0}".format(res)
             )
 
+        # Enable logger for debugging (without this, exceptions are silent during the execution)
+        self.client.enable_logger(logger)
         # Call mqtt client with another thread
         self.client.loop_start()
 
