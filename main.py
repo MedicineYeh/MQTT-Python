@@ -45,11 +45,11 @@ def exit_button():
 def btn_click():
     logger.info('Clicked')
 
-@app.events.Heartbeat(interval = 0.1)
+@app.events.Heartbeat(interval = 0.5)
 def foo():
     logger.debug("Heart is Beating!!")
 
-@app.events.DataRecover(interval = 0.5)
+@app.events.DataRecover(interval = 1.5)
 def foo2():
     logger.debug("Recover!!")
 
