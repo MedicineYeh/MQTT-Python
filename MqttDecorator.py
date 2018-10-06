@@ -1,3 +1,6 @@
+# This is a modification of stlehmann/Flask-MQTT
+# https://github.com/stlehmann/Flask-MQTT
+
 from logzero import logger
 
 from paho.mqtt.client import (  # noqa: F401
