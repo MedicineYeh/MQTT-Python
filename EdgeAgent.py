@@ -7,7 +7,7 @@ from MqttDecorator import MqttDecorator
 from Common.EventEngine import Scheduler
 
 class EdgeAgent(MqttDecorator):
-    def __init__(self, name):
+    def __init__(self, name = 'MQTT'):
         self.name = name
         self._connect_handler = None  # type: Optional[Callable]
         self._disconnect_handler = None  # type: Optional[Callable]
