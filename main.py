@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
+import os
 import logging
 import logzero
 from logzero import logger
 
 from Common.Events import PeriodicEvents
 from EdgeAgent import EdgeAgent
-#from gui import TkinterGUI
+from gui import TkinterGUI
 
 # Set a minimum log level
 logzero.loglevel(logging.DEBUG)
@@ -31,7 +32,18 @@ app.config['MQTT_TLS_ENABLED'] = False
 app.events = PeriodicEvents()
 
 # Construct the instance of GUI interface
-#app.gui = TkinterGUI()
+app.gui = TkinterGUI()
+app.gui.config['TITLE'] = 'MQTT Controler'
+
+# Only critical GUI events manages here to call other functions and gracefully shutdown
+@app.gui.on_exit()
+def exit_button():
+    logger.info('Good Bye')
+    os._exit(0)
+
+@app.gui.on_event('btn_hit')
+def btn_click():
+    logger.info('Clicked')
 
 @app.events.Heartbeat(interval = 0.1)
 def foo():
