@@ -6,3 +6,9 @@ The following core frameworks are used to establish this template.
 * Event driven and Asynchronous Application Framework [circuits](https://github.com/circuits/circuits)
 * Build-in GUI interface __tkinter__
 
+# Prerequisites
+Run the command to install python packages
+
+`pip3 install -r ./requirements.txt`
+
+
