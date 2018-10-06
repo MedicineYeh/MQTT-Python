@@ -35,6 +35,8 @@ class EdgeAgent(MqttDecorator):
         self.broker_port = self.config.get("MQTT_BROKER_PORT", 1883)
         self.tls_enabled = self.config.get("MQTT_TLS_ENABLED", False)
         self.keepalive = self.config.get("MQTT_KEEPALIVE", 60)
+        self.reconnect_delay = self.config.get("MQTT_RECONNECT_DELAY", 0.1)
+        self.reconnect_delay_max = self.config.get("MQTT_RECONNECT_DELAY_MAX", 60)
         self.last_will_topic = self.config.get("MQTT_LAST_WILL_TOPIC")
         self.last_will_message = self.config.get("MQTT_LAST_WILL_MESSAGE")
         self.last_will_qos = self.config.get("MQTT_LAST_WILL_QOS", 0)
@@ -79,6 +81,8 @@ class EdgeAgent(MqttDecorator):
 
             if self.tls_insecure:
                 self.client.tls_insecure_set(self.tls_insecure)
+
+        self.client.reconnect_delay_set(self.reconnect_delay, self.reconnect_delay_max)
 
         # Call mqtt client with another thread
         self.client.loop_start()
