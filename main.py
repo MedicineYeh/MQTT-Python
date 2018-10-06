@@ -10,6 +10,7 @@ from logzero import logger
 from Common.Events import PeriodicEvents
 from EdgeAgent import EdgeAgent
 from gui import TkinterGUI
+from Topics import mqttTopics
 
 # Set a minimum log level
 logzero.loglevel(logging.DEBUG)
@@ -35,6 +36,9 @@ config['MQTT_TLS_ENABLED'] = False
 # Construct the EdgeAgent with name, events, and GUI instances
 # namespace {app.events, app.gui} are available after this line
 app = EdgeAgent(config, PeriodicEvents(), TkinterGUI())
+
+# Register topics to app (this can be done at any time before the on_connect() is called)
+app.topics['my topic'] = mqttTopics.myTopic('UniqueID')
 
 # Configure the GUI general settings
 app.gui.config['TITLE'] = 'MQTT Controler'
