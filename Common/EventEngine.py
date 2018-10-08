@@ -1,3 +1,5 @@
+import queue as Queue
+
 from logzero import logger
 from circuits import Component, Event, Timer
 from circuits.tools import graph
@@ -32,10 +34,16 @@ class Scheduler(Component):
         if gui is not None:
             self.gui = gui
             Timer(0.01, Event.create('update_gui'), persist=True).register(self)
+        self.queue = Queue.Queue()
 
     def update_gui(self):
         if self.gui is not None:
             self.gui.update()
+        try:
+            callback = self.queue.get(False) #doesn't block
+            callback()
+        except Queue.Empty: #raised when queue is empty
+            pass
 
     def started(self, component):
         """Started Event Handler

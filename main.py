@@ -55,6 +55,12 @@ def exit_button():
 def btn_click():
     logger.info('Clicked')
 
+@app.gui.on_update()
+def update_status():
+    # Method 1
+    # Setting variables in MTQQ thread is prohibit, thus we update the UI information with periodic update checks
+    app.gui.status.set('Connected' if app.connected else 'Disconnected')
+
 # Periodic events of the core running engine/application
 @app.events.Heartbeat(interval = 0.5)
 def foo():
@@ -74,6 +80,12 @@ def handle_message(client, userdata, msg):
 @app.on_connect()
 def handle_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
+
+    # Method 2
+    # Setting variables in MTQQ thread is prohibit, thus we update the UI information through app.scheduler
+    app.scheduler.queue.put(lambda:
+            app.gui.status2.set('Connected' if app.connected else 'Disconnected')
+        )
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.

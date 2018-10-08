@@ -106,7 +106,8 @@ class EdgeAgent(MqttDecorator):
         if self.gui is not None:
             self.gui.init()
         # Run the event scheduler. This will block and run forever
-        Scheduler(self.events, self.gui).run()
+        self.scheduler = Scheduler(self.events, self.gui)
+        self.scheduler.run()
 
 
     def stop(self):

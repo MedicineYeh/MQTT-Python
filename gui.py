@@ -25,6 +25,7 @@ class TkinterGUI():
         # Merge two dicts
         self.config = {**self.config, **config}
         self.callback = key_dependent_dict(lambda key: self._dummy_event_handler(key))
+        self._on_update = None
 
     def _exit_handler(self):
         self.root.quit()
@@ -68,6 +69,14 @@ class TkinterGUI():
             text='This callback is not implemented',
             width=25, height=2,
             command=self.callback['btn_hit_no_impl_example']).pack()
+        # Connection status
+        self.status = tk.StringVar()
+        self.status.set('Disconnected')
+        tk.Label(self.root, textvariable = self.status, bg = '#C0C0C0').pack()
+        # Connection status 2
+        self.status2 = tk.StringVar()
+        self.status2.set('Disconnected')
+        tk.Label(self.root, textvariable = self.status2, bg = '#C0C0C0').pack()
 
     def update(self):
         if self._on_update:
