@@ -70,6 +70,17 @@ class TkinterGUI():
             command=self.callback['btn_hit_no_impl_example']).pack()
 
     def update(self):
+        if self._on_update:
+            self._on_update()
         # This is a single step update function (non-blocking)
         self.root.update()
+
+    def on_update(self):
+        # type: () -> Callable
+        """ A decorator function to register the event """
+
+        def _decorator(func):
+            # type: (Callable) -> Callable
+            self._on_update = func
+        return _decorator
 
